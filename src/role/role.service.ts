@@ -11,7 +11,7 @@ export class RoleService {
   ) {}
   findAll(userId: number) {
     return this.roleRepository.findBy({
-      users: { id: userId },
+      user: { id: userId },
     });
   }
 }

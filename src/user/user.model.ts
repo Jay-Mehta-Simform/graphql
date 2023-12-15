@@ -13,5 +13,5 @@ export class User {
   lastName?: string;
 
   @Field(() => [Role])
-  roles: Role[];
+  role: Role[];
 }
