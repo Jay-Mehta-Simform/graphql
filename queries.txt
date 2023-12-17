@@ -1,0 +1,80 @@
+# Product CRUD
+
+fragment product on Product {
+  id
+  name
+  price
+  inventory
+}
+
+# Get Single Product
+query Product($id1: String! = "1", $id2: String! = "2") {
+  prod1: product(id: $id1) {
+    ...product
+  }
+  prod2: product(id: $id2) {
+    ...product
+  }
+}
+query AllProducts {
+  products {
+    ...product
+  }
+}
+
+# Create Product
+mutation Insert($prod: NewProduct!) {
+  createProduct(input: $prod) {
+    ...product
+  }
+}
+
+mutation Update($id3: String! = "1", $updateProd: UpdateProduct!) {
+  updateProduct(id: $id3, input: $updateProd) {
+    ...product
+  }
+}
+
+mutation Delete($id4:String!) {
+	deleteProduct(id: $id4)
+}
+
+
+fragment userDetails on User {
+  id
+  firstName
+  lastName
+  age
+}
+
+# Write your query or mutation here
+query getUserById($id: Int!) {
+  user(id: $id) {
+    ...userDetails
+  }
+}
+
+# Get all users
+query getAllUsers {
+  users {
+    ...userDetails
+  }
+}
+
+# Create user
+mutation Insert($newUser: NewUser!) {
+  createUser(input: $newUser) {
+    ...userDetails
+  }
+}
+
+# Update User
+mutation Update($updateId: Int!, $updateUser: UpdateUser!) {
+  updateUser(id: $updateId, input: $updateUser) {
+    ...userDetails
+  }
+}
+
+mutation Delete($deleteId: Int!) {
+  deleteUser(id: $deleteId)
+}

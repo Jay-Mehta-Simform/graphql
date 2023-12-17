@@ -6,9 +6,12 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { dataSourceOptions } from './dataSource/typeorm.config';
-import { RoleModule } from './role/role.module';
+import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
 import { UserResolver } from './user/user.resolver';
+import { ProductResolver } from './product/product.resolver';
+import { OrderModule } from './order/order.module';
+import { OrderResolver } from './order/order.resolver';
 
 @Module({
   imports: [
@@ -18,9 +21,10 @@ import { UserResolver } from './user/user.resolver';
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
-    RoleModule,
+    ProductModule,
+    OrderModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserResolver],
+  providers: [AppService, UserResolver, ProductResolver, OrderResolver],
 })
 export class AppModule {}

@@ -2,18 +2,82 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Role {
-  id: Int!
-  name: String!
-}
-
 type User {
   id: Int!
   firstName: String
   lastName: String
-  role: [Role!]!
+  age: Int!
+}
+
+type Product {
+  id: Int!
+  name: String!
+  price: Int!
+  inventory: Int!
+}
+
+type Order {
+  id: Int!
+  totalPrice: Float!
+  userId: Int!
+  productIds: [Int!]!
+  products: [Product!]!
+  user: User!
 }
 
 type Query {
   user(id: Int!): User!
+  users: [User!]!
+  products: [Product!]!
+  product(id: String!): Product!
+  orders: [Order!]!
+  order(id: Int!): Order!
+}
+
+type Mutation {
+  createUser(input: NewUser!): User!
+  updateUser(id: Int!, input: UpdateUser!): User!
+  deleteUser(id: Int!): Boolean!
+  createProduct(input: NewProduct!): Product!
+  updateProduct(id: String!, input: UpdateProduct!): Product!
+  deleteProduct(id: String!): Boolean!
+  createOrder(input: NewOrder!): Order!
+  updateOrder(id: Int!, input: UpdateOrder!): Order!
+  deleteOrder(id: Int!): Boolean!
+}
+
+input NewUser {
+  age: Int!
+  firstName: String!
+  lastName: String!
+}
+
+input UpdateUser {
+  age: Int
+  firstName: String
+  lastName: String
+}
+
+input NewProduct {
+  name: String!
+  price: Int!
+  inventory: Int!
+}
+
+input UpdateProduct {
+  name: String
+  price: Int
+  inventory: Int
+}
+
+input NewOrder {
+  totalPrice: Int!
+  userId: Int!
+  productIds: [Int!]!
+}
+
+input UpdateOrder {
+  totalPrice: Int
+  userId: Int
+  productIds: [Int!]
 }

@@ -1,16 +1,10 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinColumn,
-} from 'typeorm';
-import { Role } from './role.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Order } from './order.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({ length: 500 })
   firstName: string;
@@ -18,7 +12,9 @@ export class User {
   @Column({ length: 500 })
   lastName: string;
 
-  @ManyToMany(() => Role)
-  @JoinColumn()
-  role: Role[];
+  @Column('smallint')
+  age: number;
+
+  @OneToMany(() => Order, (order) => order.user)
+  order: Order[];
 }
