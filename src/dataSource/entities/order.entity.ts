@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -22,6 +23,6 @@ export class Order {
   user: User;
 
   @ManyToMany(() => Product)
-  @JoinColumn({ name: 'productIds' })
+  @JoinTable({ name: 'productIds' })
   product: Product[];
 }

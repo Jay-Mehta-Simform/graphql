@@ -24,7 +24,7 @@ export class OrderService {
   async findOne(id: string): Promise<Order> {
     return this.orderRepository.findOne({
       where: { id: Number(id) },
-      relations: ['user', 'product'],
+      //relations: ['user', 'product'],
     });
   }
 
@@ -36,9 +36,7 @@ export class OrderService {
     order.product = await this.productRepository.find({
       where: { id: In(input.productIds) },
     });
-    console.log(order);
     const result = await this.orderRepository.save(order);
-    console.log(result, order);
     return result;
   }
 

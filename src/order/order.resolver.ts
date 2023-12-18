@@ -30,7 +30,9 @@ export class OrderResolver {
   @Query(() => Order)
   async order(@Args('id', { type: () => Int }) id: string) {
     console.log('Finding one order');
-    return this.orderService.findOne(id);
+    const result = await this.orderService.findOne(id);
+    console.log(result);
+    return result;
   }
 
   @ResolveField(() => [Product])
@@ -40,15 +42,16 @@ export class OrderResolver {
   }
 
   @ResolveField(() => User)
-  async user(@Parent() order: Order) {
-    const { userId } = order;
-    console.log('order', order);
-    return this.userService.findOneById(`${userId}`);
+  async user(@Parent() order) {
+    console.log('Resolving the User Field -', order);
+    return this.userService.findOneById(`${order.userId}`);
   }
 
   @Mutation(() => Order)
   async createOrder(@Args('input') input: NewOrder) {
-    return this.orderService.create(input);
+    const result = await this.orderService.create(input);
+    console.log('The Created order - ', result);
+    return result;
   }
 
   @Mutation(() => Order)
