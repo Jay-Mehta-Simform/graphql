@@ -13,7 +13,11 @@ export class UserService {
 
   async findOneById(id: string) {
     const result = await this.userRepository.findOneBy({ id });
-    console.log('FindOneById result -', result);
+
+    if (!result) {
+      throw new Error('User not found');
+    }
+
     return result;
   }
 
@@ -26,8 +30,16 @@ export class UserService {
   }
 
   async update(id: string, updatedUser: UpdateUser): Promise<User> {
+    await this.checkUserExists(id);
     await this.userRepository.update(id, updatedUser);
     return this.userRepository.findOneBy({ id });
+  }
+
+  async checkUserExists(id: string): Promise<void> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new Error('User not found');
+    }
   }
 
   async delete(id: string) {

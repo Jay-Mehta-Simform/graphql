@@ -19,10 +19,8 @@ type Product {
 type Order {
   id: Int!
   totalPrice: Float!
-  userId: Int!
-  productIds: [Int!]!
-  products: [Product!]!
   user: User!
+  product: [Product!]!
 }
 
 type Query {

@@ -5,6 +5,7 @@ export const dataSourceOptions: DataSourceOptions = {
   database: 'test.db',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
+  logging: true,
 };
 
 const dataSource = new DataSource(dataSourceOptions);

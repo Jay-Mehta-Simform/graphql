@@ -11,7 +11,7 @@ export class ProductService {
     private productRepository: Repository<Product>,
   ) {}
 
-  findAll(): Promise<Product[]> {
+  async findAll(): Promise<Product[]> {
     return this.productRepository.find();
   }
 
@@ -19,14 +19,35 @@ export class ProductService {
     const result = await this.productRepository.find({
       where: { id: In(ids) },
     });
-    console.log(result);
+
+    if (result.length !== ids.length) {
+      throw new Error('Insufficient data found from the database');
+    }
+
     return result;
   }
 
-  findOne(id: string): Promise<Product> {
-    return this.productRepository.findOne({
+  async findByOrder(id: number) {
+    const products = await this.productRepository.find({
+      where: { order: { id } },
+    });
+    console.debug(
+      'Turbo Log : ~ ProductService ~ findByOrder ~ products =',
+      products,
+    );
+    return products;
+  }
+
+  async findOne(id: string): Promise<Product> {
+    const product = await this.productRepository.findOne({
       where: { id: id },
     });
+
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    return product;
   }
 
   create(product: NewProduct): Promise<Product> {
@@ -41,11 +62,10 @@ export class ProductService {
       throw new Error('Product not found');
     }
 
-    existingProduct.name = product.name || existingProduct.name;
-    existingProduct.price = product.price || existingProduct.price;
-    existingProduct.inventory = product.inventory || existingProduct.inventory;
-
-    return this.productRepository.save(existingProduct);
+    return this.productRepository.save({
+      ...existingProduct,
+      ...product,
+    });
   }
 
   delete(id: string) {

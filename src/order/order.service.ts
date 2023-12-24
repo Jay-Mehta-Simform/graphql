@@ -24,8 +24,18 @@ export class OrderService {
   async findOne(id: string): Promise<Order> {
     return this.orderRepository.findOne({
       where: { id: Number(id) },
-      //relations: ['user', 'product'],
     });
+  }
+
+  async findProducts(productId: string) {
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+    });
+    console.debug(
+      'Turbo Log : ~ OrderService ~ findProducts ~ product =',
+      product,
+    );
+    return product;
   }
 
   async create(input: NewOrder): Promise<Order> {
@@ -33,9 +43,15 @@ export class OrderService {
     order.user = await this.userRepository.findOne({
       where: { id: input.userId.toString() },
     });
+    if (!order.user) {
+      throw new Error('User not found');
+    }
     order.product = await this.productRepository.find({
       where: { id: In(input.productIds) },
     });
+    if (order.product.length !== input.productIds.length) {
+      throw new Error('One or more products not found');
+    }
     const result = await this.orderRepository.save(order);
     return result;
   }
@@ -44,8 +60,21 @@ export class OrderService {
     if (Object.keys(input).length === 0) {
       throw new Error('No fields to update');
     }
-    await this.orderRepository.update(id, input);
-    return this.orderRepository.findOneBy({ id: Number(id) });
+    const order = await this.orderRepository.findOneBy({ id: Number(id) });
+    if (input.productIds) {
+      order.product = await this.productRepository.find({
+        where: { id: In(input.productIds) },
+      });
+    }
+    if (input.userId) {
+      order.user = await this.userRepository.findOne({
+        where: { id: input.userId.toString() },
+      });
+    }
+    if (input.totalPrice) {
+      order.totalPrice = input.totalPrice;
+    }
+    return this.orderRepository.save(order);
   }
 
   async delete(id: number): Promise<boolean> {

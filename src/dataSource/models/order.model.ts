@@ -8,10 +8,10 @@ export class Order {
   @Field()
   @IsPositive()
   totalPrice: number;
-  @Field(() => Int)
-  userId: number;
-  @Field(() => [Int])
-  productIds: number[];
+  // @Field(() => Int)
+  // userId: number;
+  // @Field(() => [Int])
+  // productIds: number[];
 }
 
 @InputType()
